@@ -13,8 +13,13 @@
 				<img :src="image.links[0].href" class="nasa-images" />
 			</div>
 			<div class="box-description col-4">
+				<h4>nasa_id : {{ image.data[0].nasa_id }}</h4>
 				<h2>{{ image.data[0].title }}</h2>
 				<p>{{ image.data[0].description }}</p>
+				<SelectImages
+					:dataResult="dataResult"
+					:nasa_id="image.data[0].nasa_id"
+				/>
 			</div>
 		</div>
 		<br />
@@ -22,6 +27,7 @@
 </template>
 <script>
 	import axios from 'axios'
+	import SelectImages from '@/components/SelectImages'
 	export default {
 		data() {
 			return {
@@ -33,6 +39,9 @@
 					result: '',
 				},
 			}
+		},
+		components: {
+			SelectImages,
 		},
 		computed: {
 			apiResults: {
@@ -117,7 +126,7 @@
 					console.log('NON')
 				}
 			}, */
-			getResult(userCaptur) {
+			getResult() {
 				// console.log('saisie utilisateur : ', userCaptur)
 				// this.$store.dispatch('getNasaImages', userCaptur)
 				// console.log('getNasaImages')
