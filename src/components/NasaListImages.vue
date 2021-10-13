@@ -32,7 +32,6 @@
 		data() {
 			return {
 				dataResult: '',
-				isResultContainKeyword: false,
 				keywordToFind: {
 					founded: '',
 					notFound: '',
@@ -68,7 +67,6 @@
 		},
 		created() {},
 		mounted() {
-			console.log('RESULT', this.apiResults)
 			this.getElementsFromNasaApi(this.query)
 		},
 		watch: {
@@ -88,13 +86,11 @@
 					console.log('keywords', keywords)
 					if (this.query !== null) {
 						if (keywords && keywords.length > 0) {
-							this.isResultContainKeyword = true
 							this.keywordToFind = {
 								result: `Votre recherche : ${this.query} est pertinente, voici les résultats !`,
 							}
 							console.log('keywordToFind', this.keywordToFind)
 						} else {
-							this.isResultContainKeyword = false
 							this.keywordToFind = {
 								result: `Vous ne trouverez rien avec cette suite de lettres : ${this.query}`,
 							}
@@ -104,28 +100,15 @@
 			},
 		},
 		methods: {
+			// make a get request to nasa api instead query, query corresponding to texte written by user
 			getElementsFromNasaApi(query) {
 				axios
 					.get(`https://images-api.nasa.gov/search?q=${query}&media_type=image`)
 					.then((res) => {
 						this.dataResult = res.data.collection.items
-						console.log('this.dataResult', this.dataResult)
 						return this.dataResult
 					})
 			},
-			/* 			filterDataResult(query) {
-				const dataFounded = this.getElementsFromNasaApi(query)
-				console.log('dataFounded', dataFounded)
-				const keywords = dataFounded.data[0]?.keywords.toLowerCase()
-				console.log('keywords', keywords)
-				if (keywords.includes(query)) {
-					console.log('dataFounded', dataFounded)
-					this.dataResult = dataFounded
-					return this.dataResult
-				} else {
-					console.log('NON')
-				}
-			}, */
 			getResult() {
 				// console.log('saisie utilisateur : ', userCaptur)
 				// this.$store.dispatch('getNasaImages', userCaptur)
