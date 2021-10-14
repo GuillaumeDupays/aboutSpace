@@ -31,7 +31,6 @@
 	export default {
 		data() {
 			return {
-				dataResult: '',
 				keywordToFind: {
 					founded: '',
 					notFound: '',
@@ -43,12 +42,12 @@
 			SelectImages,
 		},
 		computed: {
-			apiResults: {
+			dataResult: {
 				get() {
-					return this.$store.state.apiResults
+					return this.$store.state.datasFromNasaApi
 				},
 				set(query) {
-					this.$store.commit('GET_API_RESULTS', query)
+					this.$store.commit('GET_DATAS_NASA', query)
 				},
 			},
 			query: {
@@ -58,26 +57,13 @@
 				set(query) {
 					this.$store.commit('SET_QUERY', query)
 				},
-			},
-			nasaImages: {
-				get() {
-					return this.$store.state.nasaImages
-				},
-			},
+			}
 		},
 		created() {},
 		mounted() {
 			this.getElementsFromNasaApi(this.query)
 		},
 		watch: {
-			query(newVal) {
-				if (newVal) {
-					console.log('newVal', newVal)
-					// this.filterDataResult(newVal)
-				} else {
-					console.log(!newVal)
-				}
-			},
 			dataResult(newDataResult) {
 				if (newDataResult) {
 					const keywords = newDataResult.map((e) =>
