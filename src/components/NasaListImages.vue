@@ -5,7 +5,7 @@
 		</form>
 		<br />
 		<div>
-			{{ keywordToFind.result }}
+			{{ msgForUser }}
 		</div>
 		<br /><br />
 		<div v-for="image in dataResult" :key="image.id" class="row block-img">
@@ -31,11 +31,7 @@
 	export default {
 		data() {
 			return {
-				keywordToFind: {
-					founded: '',
-					notFound: '',
-					result: '',
-				},
+				msgForUser: '',
 			}
 		},
 		components: {
@@ -57,7 +53,7 @@
 				set(query) {
 					this.$store.commit('SET_QUERY', query)
 				},
-			}
+			},
 		},
 		created() {},
 		mounted() {
@@ -72,14 +68,9 @@
 					console.log('keywords', keywords)
 					if (this.query !== null) {
 						if (keywords && keywords.length > 0) {
-							this.keywordToFind = {
-								result: `Votre recherche : ${this.query} est pertinente, voici les résultats !`,
-							}
-							console.log('keywordToFind', this.keywordToFind)
+							this.msgForUser = `Votre recherche : ${this.query} est pertinente, voici les résultats !`
 						} else {
-							this.keywordToFind = {
-								result: `Vous ne trouverez rien avec cette suite de lettres : ${this.query}`,
-							}
+							this.msgForUser = `Vous ne trouverez rien avec cette suite de lettres : ${this.query}`
 						}
 					}
 				}
@@ -88,17 +79,8 @@
 		methods: {
 			// make a get request to nasa api instead query, query corresponding to texte written by user
 			getElementsFromNasaApi(query) {
-				axios
-					.get(`https://images-api.nasa.gov/search?q=${query}&media_type=image`)
-					.then((res) => {
-						this.dataResult = res.data.collection.items
-						return this.dataResult
-					})
-			},
-			getResult() {
-				// console.log('saisie utilisateur : ', userCaptur)
-				// this.$store.dispatch('getNasaImages', userCaptur)
-				// console.log('getNasaImages')
+				this.$store.dispatch('getDatasNasa', query)
+				console.log('this.dataResult', this.dataResult)
 			},
 		},
 	}
