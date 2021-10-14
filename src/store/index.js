@@ -4,7 +4,8 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-const NASA_API = 'https://images-api.nasa.gov/search?q='
+const SEARCH_NASA_API = 'https://images-api.nasa.gov/search?q='
+const ASSET_NASA_API = 'https://images-api.nasa.gov/asset/'
 
 export default new Vuex.Store({
 	state: {
@@ -33,12 +34,20 @@ export default new Vuex.Store({
 		postPicturesByIds({ commit }, payload) {
 			commit('GET_SELECTED_PICTURES_BY_ID', payload)
 		},
+		async findOnePictureById({ commit }, nasa_id) {
+			await axios.get(`${ASSET_NASA_API}${nasa_id}`).then((res) => {
+				console.log(ASSET_NASA_API + nasa_id)
+				commit('GET_SELECTED_PICTURES_BY_ID', res.data.collection.items)
+			})
+		},
 		// get datas from nasa api according to user captur inside the search bar : query
 		async getDatasNasa({ commit }, query) {
-			await axios.get(`${NASA_API}${query}&media_type=image`).then((res) => {
-				console.log(NASA_API + query)
-				commit('GET_DATAS_NASA', res.data.collection.items)
-			})
+			await axios
+				.get(`${SEARCH_NASA_API}${query}&media_type=image`)
+				.then((res) => {
+					console.log(SEARCH_NASA_API + query)
+					commit('GET_DATAS_NASA', res.data.collection.items)
+				})
 		},
 	},
 	modules: {},
