@@ -1,6 +1,8 @@
 <template>
 	<div class="select-images-box">
-		<button @click="sendSelectedElementToBack()">Valider la sélection</button>
+		<button @click="sendSelectedElementToBack()" v-if="checked">
+			Valider la sélection
+		</button>
 		<h3>Sélectionner cette image</h3>
 		<div>
 			<input
@@ -10,11 +12,11 @@
 				v-model="checked"
 				:value="nasa_id"
 				:id="nasa_id"
-				@click="selectAnElement()"
+				@click="selectPictureById()"
 			/>
 			<label for="Image">Image</label><br /><br />
 		</div>
-		{{ selectedNasaIds }}
+		{{ picturesByIds }}
 	</div>
 </template>
 <script>
@@ -27,11 +29,13 @@
 			nasa_id: {
 				type: String,
 			},
+			picturesByIds: {
+				type: Array,
+			},
 		},
 		data() {
 			return {
-				selectedNasaIds: [],
-				checked: null,
+				checked: false,
 				elementToSend: {
 					nasaId: '',
 					title: '',
@@ -45,8 +49,9 @@
 		},
 		mounted() {},
 		methods: {
-			selectAnElement() {
-				console.log('selectedNasaIds', this.checked)
+			selectPictureById() {
+				this.picturesByIds.push(this.nasa_id)
+				console.log('this.selectedNasaIds', this.picturesByIds)
 			},
 			getElementsSelected() {
 				axios.get('http://localhost:3000/api/pictures').then((res) => {
@@ -54,7 +59,7 @@
 				})
 			},
 			sendSelectedElementToBack() {
-				console.log(this.selectedNasaIds)
+				console.log(this.picturesByIds)
 				this.elementToSend = {
 					nasaId: 1,
 					title: 'Test',
@@ -66,21 +71,6 @@
 				// 	.post('http://localhost:3000/api/pictures', this.elementToSend)
 				// 	.then((res) => res.data.id)
 				console.log('sendSelectToBack', this.elementToSend)
-			},
-		},
-		watch: {
-			checked(newVal) {
-				if (newVal) {
-					console.log('newVal', newVal)
-					console.log('nasa_id', this.nasa_id)
-					this.selectedNasaIds.push(this.nasa_id)
-					console.log(this.selectedNasaIds)
-				}
-			},
-			selectedNasaIds(newElt) {
-				if (newElt) {
-					console.log('newElt selectedNasaIds', newElt)
-				}
 			},
 		},
 	}

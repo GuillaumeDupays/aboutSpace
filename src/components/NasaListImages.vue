@@ -17,6 +17,7 @@
 				<h2>{{ image.data[0].title }}</h2>
 				<p>{{ image.data[0].description }}</p>
 				<SelectImages
+					:picturesByIds="picturesByIds"
 					:dataResult="dataResult"
 					:nasa_id="image.data[0].nasa_id"
 				/>
@@ -38,6 +39,14 @@
 			SelectImages,
 		},
 		computed: {
+			picturesByIds: {
+				get() {
+					return this.$store.state.selectedPicturesByIds
+				},
+				set(newPicsByIds) {
+					this.$store.commit('GET_SELECTED_PICTURES_BY_ID', newPicsByIds)
+				},
+			},
 			dataResult: {
 				get() {
 					return this.$store.state.datasFromNasaApi
