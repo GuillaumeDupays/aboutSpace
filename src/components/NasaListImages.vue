@@ -17,7 +17,6 @@
 				<h2>{{ image.data[0].title }}</h2>
 				<p>{{ image.data[0].description }}</p>
 				<SelectImages
-					:picturesByIds="picturesByIds"
 					:dataResult="dataResult"
 					:nasa_id="image.data[0].nasa_id"
 				/>
@@ -27,7 +26,6 @@
 	</div>
 </template>
 <script>
-	import axios from 'axios'
 	import SelectImages from '@/components/SelectImages'
 	export default {
 		data() {
@@ -74,7 +72,6 @@
 					const keywords = newDataResult.map((e) =>
 						e?.data[0]?.keywords?.includes(this.query)
 					)
-					console.log('keywords', keywords)
 					if (this.query !== null) {
 						if (keywords && keywords.length > 0) {
 							this.msgForUser = `Votre recherche : ${this.query} est pertinente, voici les résultats !`
@@ -89,7 +86,6 @@
 			// make a get request to nasa api instead query, query corresponding to texte written by user
 			getElementsFromNasaApi(query) {
 				this.$store.dispatch('getDatasNasa', query)
-				console.log('this.dataResult', this.dataResult)
 			},
 		},
 	}

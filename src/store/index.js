@@ -14,9 +14,16 @@ export default new Vuex.Store({
 		// this object will contain datas from nasa api
 		datasFromNasaApi: [],
 		// id for each picture selected by user, return an array with all this selection
-		selectedPicturesByIds: [],
+		selectedPicturesByIds: {},
+		picturesSelected: {},
 	},
 	mutations: {
+		SAVE_PICTURES(state, newPicture) {
+			state.picturesSelected = newPicture
+		},
+		SET_PICTURES_SELECTED(state, newPicture) {
+			state.picturesSelected = newPicture
+		},
 		GET_SELECTED_PICTURES_BY_ID(state, newSelectedPicsByIds) {
 			console.log('GET_SELECTED_PICTURES_BY_ID', newSelectedPicsByIds)
 			state.selectedPicturesByIds = newSelectedPicsByIds
@@ -32,13 +39,20 @@ export default new Vuex.Store({
 	},
 	actions: {
 		postPicturesByIds({ commit }, payload) {
-			commit('GET_SELECTED_PICTURES_BY_ID', payload)
+			commit('SET_PICTURES_SELECTED', payload)
+		},
+		saveSelection({ commit }, payload) {
+			const pictures = {}
+			payload.map((picture) => (pictures[picture.id] = picture))
+			commit('SAVE_PICTURES', pictures)
 		},
 		async findOnePictureById({ commit }, nasa_id) {
-			await axios.get(`${ASSET_NASA_API}${nasa_id}`).then((res) => {
-				console.log(ASSET_NASA_API + nasa_id)
-				commit('GET_SELECTED_PICTURES_BY_ID', res.data.collection.items)
-			})
+			await axios
+				.get(`${SEARCH_NASA_API}${nasa_id}&media_type=image`)
+				.then((res) => {
+					console.log(SEARCH_NASA_API + nasa_id)
+					commit('GET_SELECTED_PICTURES_BY_ID', res.data.collection.items)
+				})
 		},
 		// get datas from nasa api according to user captur inside the search bar : query
 		async getDatasNasa({ commit }, query) {
@@ -48,6 +62,13 @@ export default new Vuex.Store({
 					console.log(SEARCH_NASA_API + query)
 					commit('GET_DATAS_NASA', res.data.collection.items)
 				})
+		},
+	},
+	getters: {
+		allPicturesSelected(state) {
+			const allPictures = state.selectedPicturesByIds
+			console.log('allPictures', allPictures)
+			return allPictures
 		},
 	},
 	modules: {},
