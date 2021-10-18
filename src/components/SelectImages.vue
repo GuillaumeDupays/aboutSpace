@@ -1,9 +1,5 @@
 <template>
 	<div class="select-images-box">
-		<button @click="userSaveHisSelection()" v-if="checked">
-			Validate selection
-		</button>
-		<h3>Sélect this picture</h3>
 		<div>
 			<input
 				type="checkbox"
@@ -13,8 +9,11 @@
 				:id="nasa_id"
 				@click="userSelectPictures()"
 			/>
-			<label for="Image">Image</label><br /><br />
+			<label for="Image">Select this picture</label><br /><br />
 		</div>
+		<button @click="userSaveHisSelection()" v-if="checked">
+			Validate selection
+		</button>
 	</div>
 </template>
 <script>
@@ -46,6 +45,7 @@
 			}
 		},
 		created() {
+			console.log('XREATED this.picturesSelected :>> ', this.picturesSelected)
 			// this.getElementsSelected()
 		},
 		mounted() {},
@@ -83,26 +83,34 @@
 				},
 			},
 		},
+		watch: {
+			picturesSelected(newPicturesSelected) {
+				// const nasaIds = newPicturesSelected.map((e) => e.nasaId)
+			},
+		},
 		methods: {
 			userSelectPictures() {
 				if (!this.checked) {
-					this.totalSelectedPictures += 1
-					console.log(
-						'this.totalSelectedPictures :>> ',
-						this.totalSelectedPictures
-					)
-					this.checked = true
-					console.log('Image sélectionnée', this.checked)
 					// made an object with properties you want to send to back-end and retrieve in the view
 					const pictureObj = {
 						nasaId: this.nasa_id,
 						title: this.titleImg,
 						href: this.href,
+						totalSelectedPictures: this.totalSelectedPictures,
 					}
-					this.picturesSelected.push(pictureObj)
 					console.log('this.picturesSelected :>> ', this.picturesSelected)
+					const pictures = this.picturesSelected.map((e) => e.nasaId)
+					console.log('pictures', pictures)
+					// check that there is no duplicate nasaId to have just one by one picture
+					if (!pictures.includes(pictureObj.nasaId)) {
+						this.totalSelectedPictures += 1
+						this.checked = true
+						console.log('Image sélectionnée', this.checked)
+						console.log('pictureObj :>> ', pictureObj)
+						this.picturesSelected.push(pictureObj)
+					}
 				} else {
-					this.totalSelectedPictures -= 1
+					// this.totalSelectedPictures -= 1
 					this.checked = false
 					console.log('Image non sélectionnée', this.checked)
 				}

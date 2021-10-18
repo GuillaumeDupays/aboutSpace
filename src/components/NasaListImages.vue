@@ -8,21 +8,17 @@
 			{{ msgForUser }}
 		</div>
 		<br /><br />
-		<div v-for="image in dataResult" :key="image.id" class="row block-img">
-			<div class="row">
-				<img :src="image.links[0].href" class="nasa-images" />
-			</div>
-			<div class="box-description col-4">
-				<h4>nasa_id : {{ image.data[0].nasa_id }}</h4>
-				<h2>{{ image.data[0].title }}</h2>
-				<p>{{ image.data[0].description }}</p>
-				<SelectImages
-					:dataResult="dataResult"
-					:nasa_id="image.data[0].nasa_id"
-					:titleImg="image.data[0].title"
-					:href="image.links[0].href"
-				/>
-			</div>
+		<div v-for="image in dataResult" :key="image.id" class="container-picture">
+			<img :src="image.links[0].href" class="picture" />
+			<h2 class="title">{{ image.data[0].title }}</h2>
+			<p class="description">{{ image.data[0].description }}</p>
+			<SelectImages
+				class="selected"
+				:dataResult="dataResult"
+				:nasa_id="image.data[0].nasa_id"
+				:titleImg="image.data[0].title"
+				:href="image.links[0].href"
+			/>
 		</div>
 		<br />
 	</div>
@@ -93,14 +89,37 @@
 	}
 </script>
 <style lang="css">
-	.nasa-images {
-		width: 30vw;
+	.container-picture {
+		display: grid;
+		grid-template-columns: 1fr 0.8fr 1.2fr;
+		grid-template-rows: 0.3fr 1.7fr 1fr;
+		gap: 0px 0px;
+	}
+	.picture {
+		grid-area: 1 / 1 / 4 / 3;
+		width: 60vw;
+	}
+	.title {
+		grid-area: 1 / 3 / 2 / 4;
+	}
+	.description {
+		grid-area: 2 / 3 / 3 / 4;
+	}
+	.selected {
+		grid-area: 3 / 3 / 4 / 4;
+	}
+	/* .nasa-images {
+		width: 60vw;
 	}
 	.block-img {
-		display: inline-flex;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
 	}
 	.box-description {
-		min-width: 70vw;
+		grid-column-start: 6;
+		grid-column-end: 8;
+		grid-row-start: 1;
+		grid-row-end: 3;
 	}
 	h2 {
 		text-align: left;
@@ -117,5 +136,5 @@
 		border-radius: 10px;
 		border-color: green;
 		padding: 1%;
-	}
+	} */
 </style>
