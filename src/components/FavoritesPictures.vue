@@ -1,8 +1,10 @@
 <template>
-	<div class="favorites-pictures">
+	<div class="favorites-images-container">
 		<div v-for="picture of allPicturesSelected" :key="picture.id">
-			<h3>{{ picture.title }}</h3>
-			<img :src="picture.href" class="nasa-images" />
+			<div class="favorite-img">
+				<h3>{{ picture.title }}</h3>
+				<img :src="picture.href" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -26,3 +28,14 @@
 		},
 	}
 </script>
+<style>
+	.favorites-images-container {
+		display: inline-flex;
+	}
+	.favorite-img > img {
+		max-width: inherit;
+	}
+	.favorite-img {
+		max-width: 48vw;
+	}
+</style>

@@ -66,12 +66,34 @@
 					this.$store.commit('SET_PICTURES_SELECTED', newPicturesSelected)
 				},
 			},
+			picturesSaved: {
+				get() {
+					return this.$store.state.picturesSaved
+				},
+				set(newPicturesSelected) {
+					this.$store.commit('SAVE_PICTURES', newPicturesSelected)
+				},
+			},
+			totalSelectedPictures: {
+				get() {
+					return this.$store.state.totalSelectedPictures
+				},
+				set(add) {
+					this.$store.dispatch('totalSelectedPictures', add)
+				},
+			},
 		},
 		methods: {
 			userSelectPictures() {
 				if (!this.checked) {
+					this.totalSelectedPictures += 1
+					console.log(
+						'this.totalSelectedPictures :>> ',
+						this.totalSelectedPictures
+					)
 					this.checked = true
 					console.log('Image sélectionnée', this.checked)
+					// made an object with properties you want to send to back-end and retrieve in the view
 					const pictureObj = {
 						nasaId: this.nasa_id,
 						title: this.titleImg,
@@ -80,12 +102,14 @@
 					this.picturesSelected.push(pictureObj)
 					console.log('this.picturesSelected :>> ', this.picturesSelected)
 				} else {
+					this.totalSelectedPictures -= 1
 					this.checked = false
 					console.log('Image non sélectionnée', this.checked)
 				}
 			},
 			userSaveHisSelection() {
-				this.$store.dispatch('saveSelection', this.picturesSelected)
+				this.picturesSaved = this.picturesSelected
+				this.$store.dispatch('saveSelection', this.picturesSaved)
 			},
 			getElementsSelected() {
 				axios.get('http://localhost:3000/api/pictures').then((res) => {

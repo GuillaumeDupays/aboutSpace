@@ -16,10 +16,15 @@ export default new Vuex.Store({
 		// id for each picture selected by user, return an array with all this selection
 		selectedPicturesByIds: {},
 		picturesSelected: [],
+		totalSelectedPictures: 0,
+		picturesSaved: [],
 	},
 	mutations: {
+		TOTAL_SELECTED_PICTURES(state, add) {
+			state.totalSelectedPictures = add
+		},
 		SAVE_PICTURES(state, newPicture) {
-			state.picturesSelected = newPicture
+			state.picturesSaved = newPicture
 		},
 		SET_PICTURES_SELECTED(state, newPicture) {
 			state.picturesSelected = newPicture
@@ -38,6 +43,9 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
+		totalSelectedPictures({ commit }, add) {
+			commit('TOTAL_SELECTED_PICTURES', add)
+		},
 		postPicturesByIds({ commit }, payload) {
 			commit('SET_PICTURES_SELECTED', payload)
 		},
@@ -65,7 +73,7 @@ export default new Vuex.Store({
 	getters: {
 		// pictures selected by user, visualize at page : 'my favorites pictures'
 		allPicturesSelected(state) {
-			const allPictures = state.picturesSelected
+			const allPictures = state.picturesSaved
 			return allPictures
 		},
 	},

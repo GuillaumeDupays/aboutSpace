@@ -3,12 +3,23 @@
 		<div id="nav">
 			<router-link to="/">Search</router-link> |
 			<router-link to="/my-favorites-pictures"
-				>My favorites pictures</router-link
+				>My selected pictures ({{ totalSelectedPictures }})</router-link
 			>
 		</div>
 		<router-view />
 	</div>
 </template>
+<script>
+	export default {
+		computed: {
+			totalSelectedPictures: {
+				get() {
+					return this.$store.state.totalSelectedPictures
+				},
+			},
+		},
+	}
+</script>
 
 <style>
 	#app {
