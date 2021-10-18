@@ -5,7 +5,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 const SEARCH_NASA_API = 'https://images-api.nasa.gov/search?q='
-const ASSET_NASA_API = 'https://images-api.nasa.gov/asset/'
+// const ASSET_NASA_API = 'https://images-api.nasa.gov/asset/'
 
 export default new Vuex.Store({
 	state: {
@@ -15,7 +15,7 @@ export default new Vuex.Store({
 		datasFromNasaApi: [],
 		// id for each picture selected by user, return an array with all this selection
 		selectedPicturesByIds: {},
-		picturesSelected: {},
+		picturesSelected: [],
 	},
 	mutations: {
 		SAVE_PICTURES(state, newPicture) {
@@ -42,16 +42,14 @@ export default new Vuex.Store({
 			commit('SET_PICTURES_SELECTED', payload)
 		},
 		saveSelection({ commit }, payload) {
-			const pictures = {}
-			payload.map((picture) => (pictures[picture.id] = picture))
-			commit('SAVE_PICTURES', pictures)
+			commit('SAVE_PICTURES', payload)
 		},
 		async findOnePictureById({ commit }, nasa_id) {
 			await axios
 				.get(`${SEARCH_NASA_API}${nasa_id}&media_type=image`)
 				.then((res) => {
 					console.log(SEARCH_NASA_API + nasa_id)
-					commit('GET_SELECTED_PICTURES_BY_ID', res.data.collection.items)
+					commit('SET_PICTURES_SELECTED', res.data.collection.items)
 				})
 		},
 		// get datas from nasa api according to user captur inside the search bar : query
@@ -66,7 +64,7 @@ export default new Vuex.Store({
 	},
 	getters: {
 		allPicturesSelected(state) {
-			const allPictures = state.selectedPicturesByIds
+			const allPictures = state.picturesSelected
 			console.log('allPictures', allPictures)
 			return allPictures
 		},

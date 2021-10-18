@@ -19,6 +19,8 @@
 				<SelectImages
 					:dataResult="dataResult"
 					:nasa_id="image.data[0].nasa_id"
+					:titleImg="image.data[0].title"
+					:href="image.links[0].href"
 				/>
 			</div>
 		</div>

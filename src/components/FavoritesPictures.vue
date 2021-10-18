@@ -1,8 +1,8 @@
 <template>
 	<div class="favorites-pictures">
-		ici prochainement les images favorites de l'utilisateur
-		<div v-for="picture of picturesByIds" :key="picture.id">
-			<img :src="picture.links[0].href" class="nasa-images" />
+		<div v-for="picture of allPicturesSelected" :key="picture.id">
+			<h3>{{ picture.title }}</h3>
+			<img :src="picture.href" class="nasa-images" />
 		</div>
 	</div>
 </template>
@@ -10,26 +10,23 @@
 <script>
 	export default {
 		computed: {
-			picturesByIds: {
+			picturesSelected: {
 				get() {
-					return this.$store.state.selectedPicturesByIds
+					return this.$store.state.picturesSelected
 				},
 			},
 			allPicturesSelected: {
 				get() {
-					return this.$store.getters.selectedPicturesByIds
+					return this.$store.getters.allPicturesSelected
 				},
 				set(value) {
 					this.$store.dispatch('allPicturesSelected', value)
 				},
 			},
 		},
-		beforeCreate() {
-			console.log('beforeCreate this.pictures :>> ', this.picturesByIds)
-		},
+		beforeCreate() {},
 		created() {
-			this.$store.dispatch('findOnePictureById')
-			console.log('this.pictures :>> ', this.picturesByIds)
+			console.log('this.pictures :>> ', this.picturesSelected)
 			console.log('this.allPicturesSelected :>> ', this.allPicturesSelected)
 		},
 	}
