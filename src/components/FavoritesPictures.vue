@@ -30,12 +30,14 @@
 </script>
 <style>
 	.favorites-images-container {
-		display: inline-flex;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
 	}
 	.favorite-img > img {
-		max-width: inherit;
+		min-width: 30vw;
 	}
 	.favorite-img {
-		max-width: 48vw;
+		max-width: inherit;
 	}
 </style>

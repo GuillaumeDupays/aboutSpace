@@ -91,6 +91,7 @@
 <style lang="css">
 	.container-picture {
 		display: grid;
+		flex-wrap: wrap;
 		grid-template-columns: 1fr 0.8fr 1.2fr;
 		grid-template-rows: 0.3fr 1.7fr 1fr;
 		gap: 0px 0px;

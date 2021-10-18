@@ -45,7 +45,6 @@
 			}
 		},
 		created() {
-			console.log('XREATED this.picturesSelected :>> ', this.picturesSelected)
 			// this.getElementsSelected()
 		},
 		mounted() {},
