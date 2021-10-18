@@ -63,9 +63,9 @@ export default new Vuex.Store({
 		},
 	},
 	getters: {
+		// pictures selected by user, visualize at page : 'my favorites pictures'
 		allPicturesSelected(state) {
 			const allPictures = state.picturesSelected
-			console.log('allPictures', allPictures)
 			return allPictures
 		},
 	},

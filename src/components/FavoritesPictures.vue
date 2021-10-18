@@ -24,10 +24,5 @@
 				},
 			},
 		},
-		beforeCreate() {},
-		created() {
-			console.log('this.pictures :>> ', this.picturesSelected)
-			console.log('this.allPicturesSelected :>> ', this.allPicturesSelected)
-		},
 	}
 </script>
