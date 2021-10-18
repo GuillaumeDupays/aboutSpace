@@ -11,7 +11,11 @@
 			/>
 			<label for="Image">Select this picture</label><br /><br />
 		</div>
-		<button @click="userSaveHisSelection()" v-if="checked">
+		<button
+			@click="userSaveHisSelection()"
+			v-if="checked"
+			class="btn-select-images clicked"
+		>
 			Validate selection
 		</button>
 	</div>
@@ -140,3 +144,21 @@
 		},
 	}
 </script>
+<style>
+	.btn-select-images {
+		width: 80%;
+		padding: 2%;
+		border: 1px solid rgb(0, 102, 255);
+		color: rgb(0, 102, 255);
+		font-size: large;
+		background: white;
+	}
+	.clicked {
+		width: 80%;
+		padding: 2%;
+		border: 2px solid white;
+		color: white;
+		font-size: large;
+		background: rgb(0, 102, 255);
+	}
+</style>
