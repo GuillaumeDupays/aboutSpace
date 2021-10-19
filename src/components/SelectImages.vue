@@ -4,7 +4,7 @@
 			<input
 				type="checkbox"
 				name="Image"
-				v-model="checked"
+				v-model="isChecked"
 				:value="nasa_id"
 				:id="nasa_id"
 				@click="userSelectPictures()"
@@ -13,10 +13,13 @@
 		</div>
 		<button
 			@click="userSaveHisSelection()"
-			v-if="checked"
-			class="btn-select-images clicked"
+			v-if="isChecked"
+			:class="{
+				'btn-select-images': isChecked,
+				clicked: isSavedSelection && isChecked,
+			}"
 		>
-			Validate selection
+			{{ savedSelectionMessage }}
 		</button>
 	</div>
 </template>
@@ -45,7 +48,10 @@
 					urlImage: '',
 					keywords: [],
 				},
-				checked: false,
+				isChecked: false,
+				isPictureSelected: false,
+				isSavedSelection: false,
+				savedSelectionMessage: 'Save',
 			}
 		},
 		created() {
@@ -86,14 +92,10 @@
 				},
 			},
 		},
-		watch: {
-			picturesSelected(newPicturesSelected) {
-				// const nasaIds = newPicturesSelected.map((e) => e.nasaId)
-			},
-		},
+		watch: {},
 		methods: {
 			userSelectPictures() {
-				if (!this.checked) {
+				if (!this.isChecked) {
 					// made an object with properties you want to send to back-end and retrieve in the view
 					const pictureObj = {
 						nasaId: this.nasa_id,
@@ -107,19 +109,21 @@
 					// check that there is no duplicate nasaId to have just one by one picture
 					if (!pictures.includes(pictureObj.nasaId)) {
 						this.totalSelectedPictures += 1
-						this.checked = true
-						console.log('Image sélectionnée', this.checked)
+						this.isChecked = true
+						console.log('Image sélectionnée', this.isChecked)
 						console.log('pictureObj :>> ', pictureObj)
 						this.picturesSelected.push(pictureObj)
 					}
 				} else {
 					// this.totalSelectedPictures -= 1
-					this.checked = false
-					console.log('Image non sélectionnée', this.checked)
+					this.isChecked = false
+					console.log('Image non sélectionnée', this.isChecked)
 				}
 			},
 			userSaveHisSelection() {
+				this.savedSelectionMessage = 'Picture saved'
 				this.picturesSaved = this.picturesSelected
+				this.isSavedSelection = true
 				this.$store.dispatch('saveSelection', this.picturesSaved)
 			},
 			getElementsSelected() {
