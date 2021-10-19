@@ -1,5 +1,8 @@
 <template>
 	<div class="select-images-box">
+		<button :class="buttonStyle.class" @click="changeButtonStyle()">
+			{{ buttonStyle.label }}
+		</button>
 		<div>
 			<input
 				type="checkbox"
@@ -25,6 +28,7 @@
 </template>
 <script>
 	import axios from 'axios'
+	import styleStore from '../store/style'
 	export default {
 		props: {
 			dataResult: {
@@ -42,6 +46,12 @@
 		},
 		data() {
 			return {
+				styleStore,
+				newObj: {
+					isClicked: true,
+					label: 'Bouton cliqué',
+					class: 'clicked',
+				},
 				elementToSend: {
 					nasaId: '',
 					title: '',
@@ -59,6 +69,14 @@
 		},
 		mounted() {},
 		computed: {
+			buttonStyle: {
+				get() {
+					return this.$store.state.style.button
+				},
+				set(changeStyle) {
+					this.$store.commit('style/ACTIVE_BUTTON', changeStyle)
+				},
+			},
 			picturesByIds: {
 				get() {
 					return this.$store.state.selectedPicturesByIds
@@ -94,6 +112,23 @@
 		},
 		watch: {},
 		methods: {
+			// dynamic change style button
+			changeButtonStyle(clickedStyle, initStyle) {
+				clickedStyle = {
+					isClicked: true,
+					label: 'Bouton cliqué',
+					class: 'clicked',
+				}
+				initStyle = {
+					isClicked: false,
+					label: 'Bouton non cliqué',
+					class: 'btn-select-images',
+				}
+				this.$store.dispatch(
+					'activeButton',
+					!this.buttonStyle.isClicked ? clickedStyle : initStyle
+				)
+			},
 			userSelectPictures() {
 				if (!this.isChecked) {
 					// made an object with properties you want to send to back-end and retrieve in the view

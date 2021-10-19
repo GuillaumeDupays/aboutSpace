@@ -1,13 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-
+import style from '../store/style'
 Vue.use(Vuex)
 
 const SEARCH_NASA_API = 'https://images-api.nasa.gov/search?q='
 // const ASSET_NASA_API = 'https://images-api.nasa.gov/asset/'
 
 export default new Vuex.Store({
+	modules: {
+		style,
+	},
 	state: {
 		// default value when search bar is empty, corresponding to the v-model in NasaListImages.vue
 		query: null,
@@ -77,5 +80,4 @@ export default new Vuex.Store({
 			return allPictures
 		},
 	},
-	modules: {},
 })
