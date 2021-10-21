@@ -1,7 +1,7 @@
 <template>
 	<div class="select-images-box">
-		<button :class="buttonStyle.class" @click="changeButtonStyle()">
-			{{ buttonStyle.label }}
+		<button :class="buttonStyle.style.class" @click="changeButtonStyle()">
+			{{ buttonStyle.style.label }}
 		</button>
 		<div>
 			<input
@@ -17,10 +17,7 @@
 		<button
 			@click="userSaveHisSelection()"
 			v-if="isChecked"
-			:class="{
-				'btn-select-images': isChecked,
-				clicked: isSavedSelection && isChecked,
-			}"
+			:class="buttonStyle.class"
 		>
 			{{ savedSelectionMessage }}
 		</button>
@@ -47,16 +44,10 @@
 		data() {
 			return {
 				styleStore,
-				newObj: {
-					isClicked: true,
-					label: 'Bouton cliqué',
-					class: 'clicked',
-				},
 				elementToSend: {
 					nasaId: '',
 					title: '',
-					urlImage: '',
-					keywords: [],
+					href: '',
 				},
 				isChecked: false,
 				isPictureSelected: false,
@@ -113,17 +104,10 @@
 		watch: {},
 		methods: {
 			// dynamic change style button
-			changeButtonStyle(clickedStyle, initStyle) {
-				clickedStyle = {
-					isClicked: true,
-					label: 'Bouton cliqué',
-					class: 'clicked',
-				}
-				initStyle = {
-					isClicked: false,
-					label: 'Bouton non cliqué',
-					class: 'btn-select-images',
-				}
+			changeButtonStyle(
+				clickedStyle = this.buttonStyle.isClickedStyle,
+				initStyle = this.buttonStyle.initialStyle
+			) {
 				this.$store.dispatch(
 					'activeButton',
 					!this.buttonStyle.isClicked ? clickedStyle : initStyle
@@ -136,7 +120,7 @@
 						nasaId: this.nasa_id,
 						title: this.titleImg,
 						href: this.href,
-						totalSelectedPictures: this.totalSelectedPictures,
+						totalPicturesSaved: this.totalSelectedPictures,
 					}
 					console.log('this.picturesSelected :>> ', this.picturesSelected)
 					const pictures = this.picturesSelected.map((e) => e.nasaId)
@@ -157,29 +141,36 @@
 			},
 			userSaveHisSelection() {
 				this.savedSelectionMessage = 'Picture saved'
-				this.picturesSaved = this.picturesSelected
+				console.log('this.picturesSelected', this.picturesSelected)
+				// iterate object to have values and not just the keys
+				for (let i of this.picturesSelected) {
+					this.picturesSelected = i
+					this.picturesSaved = this.picturesSelected
+					console.log('this.picturesSaved :>> ', this.picturesSaved)
+					// for each selected pictures, saveSelection
+					this.$store.dispatch('saveSelection', this.picturesSaved)
+				}
 				this.isSavedSelection = true
-				this.$store.dispatch('saveSelection', this.picturesSaved)
 			},
 			getElementsSelected() {
 				axios.get('http://localhost:3000/api/pictures').then((res) => {
 					console.log('	getElementsSelected', res.data)
 				})
 			},
-			// sendSelectedElementToBack() {
-			// 	console.log(this.picturesByIds)
-			// 	this.elementToSend = {
-			// 		nasaId: 1,
-			// 		title: 'Test',
-			// 		urlImage:
-			// 			'https://images-assets.nasa.gov/image/PIA13213/collection.json',
-			// 		keywords: ['test', 'image', 'mongoDb'],
-			// 	}
-			// 	// axios
-			// 	// 	.post('http://localhost:3000/api/pictures', this.elementToSend)
-			// 	// 	.then((res) => res.data.id)
-			// 	console.log('sendSelectToBack', this.elementToSend)
-			// },
+			sendSelectedElementToBack() {
+				console.log(this.picturesByIds)
+				// this.elementToSend = {
+				// 	nasaId: 1,
+				// 	title: 'Test',
+				// 	urlImage:
+				// 		'https://images-assets.nasa.gov/image/PIA13213/collection.json',
+				// 	keywords: ['test', 'image', 'mongoDb'],
+				// }
+				// axios
+				// 	.post('http://localhost:3000/api/pictures', this.elementToSend)
+				// 	.then((res) => res.data.id)
+				console.log('sendSelectToBack', this.elementToSend)
+			},
 		},
 	}
 </script>

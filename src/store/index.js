@@ -27,7 +27,7 @@ export default new Vuex.Store({
 			state.totalSelectedPictures = add
 		},
 		SAVE_PICTURES(state, newPicture) {
-			state.picturesSaved = newPicture
+			state.picturesSaved = { ...newPicture }
 		},
 		SET_PICTURES_SELECTED(state, newPicture) {
 			state.picturesSelected = newPicture
@@ -53,7 +53,18 @@ export default new Vuex.Store({
 			commit('SET_PICTURES_SELECTED', payload)
 		},
 		saveSelection({ commit }, payload) {
+			axios
+				.post('http://localhost:3000/api/pictures', payload)
+				.then((res) => {
+					payload = res.data
+					console.log('result', payload)
+					return payload
+				})
+				.catch((err) => {
+					console.log('err', err)
+				})
 			commit('SAVE_PICTURES', payload)
+			console.log('SAVE_PICTURES :>> ', payload)
 		},
 		async findOnePictureById({ commit }, nasa_id) {
 			await axios

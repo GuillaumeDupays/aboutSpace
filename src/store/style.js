@@ -1,9 +1,21 @@
 const style = {
 	state: {
 		button: {
-			isClicked: false,
-			label: 'Bouton non cliqué',
-			class: 'btn-select-images',
+			style: {
+				isClicked: false,
+				label: '',
+				class: '',
+			},
+			initialStyle: {
+				isClicked: false,
+				label: 'Bouton non cliqué',
+				class: 'btn-select-images',
+			},
+			isClickedStyle: {
+				isClicked: true,
+				label: 'Bouton cliqué',
+				class: 'clicked',
+			},
 		},
 	},
 	mutations: {
