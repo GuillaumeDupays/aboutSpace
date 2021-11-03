@@ -1,6 +1,6 @@
 <template>
 	<div class="favorites-images-container">
-		<div v-for="picture of allPicturesSelected" :key="picture.id">
+		<div v-for="picture of picturesSelected" :key="picture.id">
 			<div class="favorite-img">
 				<h3>{{ picture.title }}</h3>
 				<img :src="picture.href" />

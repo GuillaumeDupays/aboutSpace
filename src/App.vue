@@ -5,6 +5,8 @@
 			<router-link to="/my-favorites-pictures"
 				>My selected pictures ({{ totalSelectedPictures }})</router-link
 			>
+			|
+			<router-link to="/saved">Saved selections</router-link>
 		</div>
 		<router-view />
 	</div>

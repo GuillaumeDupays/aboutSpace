@@ -46,6 +46,12 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
+		getSavedPictures({ commit }) {
+			axios.get('http://localhost:3000/api/pictures').then((res) => {
+				res.data
+				commit('SAVE_PICTURES', res.data)
+			})
+		},
 		totalSelectedPictures({ commit }, add) {
 			commit('TOTAL_SELECTED_PICTURES', add)
 		},
@@ -85,6 +91,10 @@ export default new Vuex.Store({
 		},
 	},
 	getters: {
+		allPicturesSaved(state) {
+			const allPictures = state.picturesSaved
+			return allPictures
+		},
 		// pictures selected by user, visualize at page : 'my favorites pictures'
 		allPicturesSelected(state) {
 			const allPictures = state.picturesSaved

@@ -1,24 +1,30 @@
 const style = {
 	state: {
+		isChecked: false,
 		button: {
 			style: {
-				isClicked: false,
 				label: '',
 				class: '',
 			},
 			initialStyle: {
-				isClicked: false,
-				label: 'Bouton non cliqué',
+				label: 'Save selection',
 				class: 'btn-select-images',
 			},
-			isClickedStyle: {
-				isClicked: true,
-				label: 'Bouton cliqué',
+			validation: {
+				label: 'Selection is saved',
 				class: 'clicked',
 			},
 		},
 	},
 	mutations: {
+		STYLE_BUTTON(state, newVal) {
+			if (state.button.style.label === '') {
+				state.button.style = newVal.button.initialStyle
+			}
+		},
+		IS_CHECKED(state, newVal) {
+			state.isChecked = newVal
+		},
 		ACTIVE_BUTTON(state, newVal) {
 			state.button = newVal
 		},
@@ -26,6 +32,11 @@ const style = {
 	actions: {
 		activeButton({ commit }, payload) {
 			commit('ACTIVE_BUTTON', payload)
+		},
+	},
+	getters: {
+		getStyleButton(state) {
+			return state.button
 		},
 	},
 }

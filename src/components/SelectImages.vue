@@ -1,8 +1,5 @@
 <template>
 	<div class="select-images-box">
-		<button :class="buttonStyle.style.class" @click="changeButtonStyle()">
-			{{ buttonStyle.style.label }}
-		</button>
 		<div>
 			<input
 				type="checkbox"
@@ -17,9 +14,9 @@
 		<button
 			@click="userSaveHisSelection()"
 			v-if="isChecked"
-			:class="buttonStyle.class"
+			:class="buttonStyle.style.class"
 		>
-			{{ savedSelectionMessage }}
+			{{ buttonStyle.style.label }}
 		</button>
 	</div>
 </template>
@@ -56,16 +53,33 @@
 			}
 		},
 		created() {
+			console.log('object :>> ', object)
+			console.log('this.getStyleButton :>> ', this.getStyleButton)
+			this.buttonStyle = Object.assign({}, this.getStyleButton)
+			console.log('this.buttonStyle :>> ', this.buttonStyle)
+			this.$store.dispatch('getSavedPictures')
+			// this.buttonStyle.style = this.buttonStyle.initialStyle
+			// console.log('this.buttonStyle :>> ', this.buttonStyle)
+			// this.$store.dispatch('activeButton', this.buttonStyle)
+
 			// this.getElementsSelected()
 		},
 		mounted() {},
 		computed: {
+			// style(commit) {
+			// 	this.$store.commit('STYLE_BUTTON', commit)
+			// },
+			getStyleButton: {
+				get() {
+					return this.$store.getters.getStyleButton
+				},
+			},
 			buttonStyle: {
 				get() {
-					return this.$store.state.style.button
+					return this.$store.state.style.button.style
 				},
 				set(changeStyle) {
-					this.$store.commit('style/ACTIVE_BUTTON', changeStyle)
+					this.$store.commit('ACTIVE_BUTTON', changeStyle)
 				},
 			},
 			picturesByIds: {
@@ -104,15 +118,32 @@
 		watch: {},
 		methods: {
 			// dynamic change style button
-			changeButtonStyle(
-				clickedStyle = this.buttonStyle.isClickedStyle,
-				initStyle = this.buttonStyle.initialStyle
-			) {
-				this.$store.dispatch(
-					'activeButton',
-					!this.buttonStyle.isClicked ? clickedStyle : initStyle
-				)
+			styleButton() {},
+			initalizeStyleButton() {
+				if (!this.isChecked && !this.isSavedSelection) {
+					// buttonStyle.style get values for the dom, only change buttonStyle.style with others buttonStyle
+					// first time, initialize buttonStyle.style
+					this.buttonStyle.style = this.buttonStyle.initialStyle
+					console.log('this.buttonStyle.style :>> ', this.buttonStyle.style)
+				}
 			},
+			validationStyleButton() {
+				if (this.isChecked && this.isSavedSelection) {
+					this.buttonStyle.style = this.buttonStyle.validation
+					console.log('this.buttonStyle.style :>> ', this.buttonStyle.style)
+				}
+			},
+			// changeButtonStyle(
+			// 	clickedStyle = this.buttonStyle.isClickedStyle.class,
+			// 	initStyle = this.buttonStyle.initialStyle.class
+			// ) {
+			// 	this.$store.dispatch(
+			// 		'activeButton',
+			// 		!this.buttonStyle.isClicked
+			// 			? (this.buttonStyle.style = clickedStyle)
+			// 			: (this.buttonStyle.style = initStyle)
+			// 	)
+			// },
 			userSelectPictures() {
 				if (!this.isChecked) {
 					// made an object with properties you want to send to back-end and retrieve in the view
@@ -122,9 +153,14 @@
 						href: this.href,
 						totalPicturesSaved: this.totalSelectedPictures,
 					}
-					console.log('this.picturesSelected :>> ', this.picturesSelected)
+					// console.log('this.picturesSelected :>> ', this.picturesSelected)
 					const pictures = this.picturesSelected.map((e) => e.nasaId)
 					console.log('pictures', pictures)
+					// const savedPictures = () => this.$store.getters.allPicturesSaved
+					// console.log('savedPictures :>> ', savedPictures)
+					// let test = savedPictures[Symbol.iterator]()
+					// let entry = test.next()
+					// console.log('entry :>> ', entry)
 					// check that there is no duplicate nasaId to have just one by one picture
 					if (!pictures.includes(pictureObj.nasaId)) {
 						this.totalSelectedPictures += 1
@@ -144,13 +180,13 @@
 				console.log('this.picturesSelected', this.picturesSelected)
 				// iterate object to have values and not just the keys
 				for (let i of this.picturesSelected) {
-					this.picturesSelected = i
-					this.picturesSaved = this.picturesSelected
+					this.picturesSaved = i
 					console.log('this.picturesSaved :>> ', this.picturesSaved)
 					// for each selected pictures, saveSelection
 					this.$store.dispatch('saveSelection', this.picturesSaved)
 				}
 				this.isSavedSelection = true
+				// this.styleButton()
 			},
 			getElementsSelected() {
 				axios.get('http://localhost:3000/api/pictures').then((res) => {
